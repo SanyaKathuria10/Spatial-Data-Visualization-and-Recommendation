@@ -35,7 +35,7 @@ df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['useri
 #     ])
 # print(type(top_attraction_lats))
 
-df= df[:100]
+
 tup_lat = list(df.latitute)
 tup_long = list(df.longitude)
 
