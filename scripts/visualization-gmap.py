@@ -1,6 +1,7 @@
 from gmplot import gmplot
 import matplotlib.pyplot as plt
 import pandas as pd
+import webbrowser, os
 # Place map
 gmap = gmplot.GoogleMapPlotter(40.7589, -73.9851, 9)
 df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitute','longitude','timezone','utctime'])
@@ -61,3 +62,4 @@ gmap.heatmap(tup_lat, tup_long)
 
 # Draw
 gmap.draw("ny_heat_map.html")
+webbrowser.open("file://"+os.path.realpath("ny_heat_map.html"))
