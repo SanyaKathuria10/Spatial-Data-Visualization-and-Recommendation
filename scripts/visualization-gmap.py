@@ -2,7 +2,7 @@ from gmplot import gmplot
 import matplotlib.pyplot as plt
 import pandas as pd
 # Place map
-gmap = gmplot.GoogleMapPlotter(37.766956, -122.438481, 13)
+gmap = gmplot.GoogleMapPlotter(40.7589, -73.9851, 9)
 df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitute','longitude','timezone','utctime'])
 
 
@@ -34,7 +34,7 @@ df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['useri
 #     (37.770104, -122.470436)
 #     ])
 # print(type(top_attraction_lats))
-
+# df= df[0:100]
 
 tup_lat = list(df.latitute)
 tup_long = list(df.longitude)
@@ -60,4 +60,4 @@ gmap.heatmap(tup_lat, tup_long)
 # gmap.marker(tuple(df.latitute), tuple(df.longitude), 'cornflowerblue')
 
 # Draw
-gmap.draw("ny_map.html")
+gmap.draw("ny_heat_map.html")
