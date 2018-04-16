@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Visualizing User behaviour using Foursquare checkins data</title>
+	<link href="styles/style.css" rel="stylesheet">
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/histogram.css" rel="stylesheet">
+	<style>
+		html {
+			font-family: 'Georgia', serif;
+		}	
+		.header {
+			background-color:white;
+			color: #ffffff;
+			padding: 15px;
+		}
+		}
+	</style>
+  </head>
+  <div class="header"> 
+  <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+  <body style="background-color:white;">
+	  <h1 style="color:blue;"><i><u>Visualizing User behaviour using Foursquare check-ins data</i></u></h1>
+      </div>
+	  </div>
+    </div>
+	
+	   <div class="row section">
+        <div class="col-lg-12">
+		  <p style="color:blue; font-family: 'Georgia', serif; font-size: 20px;"><b>As the Location Based Social Networks have become popular, activity data of millions of users has become attainable. We have therefore used the foursquare dataset consisting of user check-ins for New York city to analyze behaviors of users in one of the majorly populated cities in the US. This dataset contains check-ins collected for 10 months in NYC. It contains 227,428 check-ins in New York city and each check-in is associated with time stamp, GPS coordinates and the venue categories. This dataset is used for studying and visualizing the spatial-temporal regularity of user activity.<b></p>
+          <h3 style="color:red;"><b><u><i>Analysing Checkins on Temporial aspects:</b></u></i></h3>
+		  <div class="row">
+          <div class="col-lg-12">
+		      <h3 style="color:blue;">Number of Checkins through the Days:</h3>
+			   <p style="font-family: 'Georgia', serif; font-size: 20px;">The below graph analyzes number of checkins through the days to visualize the peaks for different locations through the days and timeframes. We can conclude that during weekends, peakd for locations show a more gradual rise of check-ins, sometime after noon.</p>
+              <div id="day-comparison"></div>
+              <div id="dc-tooltip" class="tooltip"></div>
+            <div class="col-md-6">
+            </div>   
+      </div>
+	  </div>
+	  </div>
+      </div>
+      <div class="row section">
+        <div class="col-lg-12">
+		<h3 style="color:blue;">Number of Checkins through the Days and Months as per the Timeframes:</h3>
+		 <p style="font-family: 'Georgia', serif; font-size: 20px;">The below given histogram analyzes number of checkins by using different combinations of days and months to visualize both of these parameters according to timeframe at every hour of the day. </p>
+		 <p style="font-family: 'Georgia', serif; font-size: 20px;">It helps us to see users' behaviours through many different timeframes of the year and as expected, we see particular time frames which have peak number of check-ins contributed by locations like office, bars, subway and coffee shops. </p>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div id="histogram"></div>
+          </div>
+        </div>
+	  
+	  <div class="row section">
+        <div class="col-lg-8">
+          <div class="btn-group btn-group-lg" role="group">
+            <button type="button" class="btn btn-default btn-month center-block active" value="0">Monday</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="1">Tuesday</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="2">Wednesday</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="3">Thursday</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="4">Friday</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="5">Saturday</button>
+			<button type="button" class="btn btn-default btn-month center-block active" value="6">Sunday</button>
+          </div>
+		  
+      <div class="row section">
+        <div class="col-lg-8">
+          <div class="btn-group btn-group-lg" role="group">
+            <button type="button" class="btn btn-default btn-month center-block active" value="1">January</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="2">February</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="3">March</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="4">April</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="5">May</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="6">June</button>
+          </div>
+        </div>
+      </div>
+	  
+	  <div class="row section">
+        <div class="col-lg-8">
+          <div class="btn-group btn-group-lg" role="group">
+	  <button type="button" class="btn btn-default btn-month center-block active" value="7">July</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="8">August</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="9">September</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="10">October</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="11">November</button>
+            <button type="button" class="btn btn-default btn-month center-block active" value="12">December</button>
+	  </div>
+        </div>
+      </div>
+	  
+	  <div class="row section">
+      <div class="col-lg-12">
+	  <h3 style="color:blue;">CCheck-ins as per different venue categories:</h3>
+	  <p style="font-family: 'Georgia', serif; font-size: 20px;">TThe below plots show the differences in check-in patterns between different venue categories throughout the day.</p>
+	  </div>
+	  </div>
+      <div class="row text-center top25">
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm1"></div>Bars</div>
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm2"></div>Coffee Shops</div>
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm3"></div>Gym and Fitness Centre</div>
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm4"></div>Clothing Stores</div>
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm5"></div>Subway</div>
+        <div class="col-md-4 col-sm-6 sm-label"><div id="category-sm6"></div>College Buildings</div>
+      </div>
+	
+	<script src="scripts/d3.min.js"></script>
+    <script src="scripts/jquery-2.1.4.min.js"></script>
+    <script src="scripts/categories.js"></script>
+    <script src="scripts/small_multiples.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+	<script src="scripts/histogram.js"></script>
+    <script src="scripts/day_comparison.js"></script>
+  </body>
+</html>
