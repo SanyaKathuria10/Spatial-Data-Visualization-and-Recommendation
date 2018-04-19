@@ -13,13 +13,9 @@ day = []
 hour =[]
 
 for i in time:
-
     month.append(i.month)
-
     hour.append(i.hour)
-
     day.append(i.weekday())
-
 
 df['day'] = day
 

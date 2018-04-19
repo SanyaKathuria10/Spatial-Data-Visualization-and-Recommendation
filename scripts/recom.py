@@ -1,5 +1,7 @@
 import pandas as pd
 import math
+from scipy.spatial import ConvexHull
+import numpy as np
 
 def get_rows_by_category(df, category):
 	#select all rows with category coffee shop
@@ -23,8 +25,8 @@ def get_checkin_count_per_venue_in_category(category_rows):
 	venue_group = venue_group.sort_values(['count'], ascending=False)
 	return venue_group
 
-#count number of venues
 def get_number_of_venues_per_category(venue_group):
+	#count number of venues per category
 	count_venue = len(venue_group['venueid'])
 	#print(count_venue)
 	#38333
@@ -45,6 +47,7 @@ def get_number_venues_visited_by_user(user_venue_group, user):
 	return count_user_venue
 
 def get_all_user_checkins(df, user):
+	#list of all checkins made by a user
 	user_rows = df.loc[df['userid'] == user]
 	user_rows = pd.DataFrame({'count' : category_rows.groupby(['userid','venueid','latitude','longitude']).size()}).reset_index()
 	return user_rows
@@ -56,7 +59,7 @@ def calculate_p_go(count_venue, count_user_venue):
 	#print(p_go)
 
 def calculate_p_close(venue_group, user_rows):
-	#total number of checkins of each user
+	#number of checkins in venue radius / total number of checkins of each user
 	x = 0
 	d = []
 	x = user_rows
@@ -73,14 +76,16 @@ def calculate_p_close(venue_group, user_rows):
 		user_rows = user_rows.loc[user_rows['distance'] < (maxi - mini)/3]
 		p_close.append(sum(user_rows['count'])/denom)
 	return p_close
-		#user_rows = user_rows['userid', 'venueid', 'latitude', 'longitude', 'count']
-		# user_rows = user_rows.drop(labels = ['distance'], axis = 1)
-		# print(user_rows.head())
+	#user_rows = user_rows['userid', 'venueid', 'latitude', 'longitude', 'count']
+	# user_rows = user_rows.drop(labels = ['distance'], axis = 1)
+	# print(user_rows.head())
 
 def calculate_p_like(category_rows, venue_group, time):
+	#number of checkins at a venue / number of checkins at all venues belonging to the same category
 	denom = sum(venue_group['count'])
 	avg_time = pd.DataFrame({'average' : category_rows.groupby(['userid','venueid'])['hour'].mean()}).reset_index()
 	p_like = []
+	#time penalty to make sure a place popular at nights is not suggested in the morning
 	for index, venue in venue_group.iterrows():
 		num = venue['count']
 		initial_p_like = (num / denom)
@@ -99,9 +104,23 @@ def calculate_p_like(category_rows, venue_group, time):
 	return p_like
 	#distance between venue coordinates and each of user checkin, filter checkins using distance threshold and count #
 
-def suggestions(p_like, p_close):
-	p = []
+def find_weights(user_rows):
+	location = np.array(user_rows[['latitude', 'longitude']])
+	hull = ConvexHull(location)
 	
+
+def suggestions(p_like, p_close, venue_group):
+	x = np.array(p_like)
+	y = np.array(p_close)
+	p = x * y
+	q = np.argsort(p)
+	venueid = []
+	for i in range(1,21):
+		index = q[i]
+		venueid.append(venue_group.loc[index])
+	for venue in venueid:
+		print(venue.venueid)
+
 
 def haversine_dist(lat1, lon1, lat2, lon2):
 	"""Calculate the Haversine distance between two geo co-ordiantes."""
@@ -128,6 +147,7 @@ if __name__ == '__main__':
 	p_go = calculate_p_go(count_venue, count_user_venue)
 	p_close = calculate_p_close(venue_group, user_rows)
 	p_like = calculate_p_like(category_rows, venue_group, time)
-	print(p_go)
-	print(p_close)
-	print(p_like)
+	#print(p_go)
+	#print(p_close)
+	#print(p_like)
+	suggestions(p_like, p_close, venue_group)
