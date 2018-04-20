@@ -2,6 +2,7 @@ import pandas as pd
 import math
 from scipy.spatial import ConvexHull
 import numpy as np
+from sklearn.cluster import DBSCAN
 
 def get_rows_by_category(df, category):
 	#select all rows with category coffee shop
@@ -80,6 +81,16 @@ def calculate_p_close(venue_group, user_rows):
 	# user_rows = user_rows.drop(labels = ['distance'], axis = 1)
 	# print(user_rows.head())
 
+def haversine_dist(lat1, lon1, lat2, lon2):
+	"""Calculate the Haversine distance between two geo co-ordiantes."""
+	radius = 3959  # miles
+	dlat = math.radians(lat2 - lat1)
+	dlon = math.radians(lon2 - lon1)
+	a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
+	c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+	d = radius * c
+	return d
+
 def calculate_p_like(category_rows, venue_group, time):
 	#number of checkins at a venue / number of checkins at all venues belonging to the same category
 	denom = sum(venue_group['count'])
@@ -105,6 +116,7 @@ def calculate_p_like(category_rows, venue_group, time):
 	#distance between venue coordinates and each of user checkin, filter checkins using distance threshold and count #
 
 def find_weights(user_rows):
+	
 	location = np.array(user_rows[['latitude', 'longitude']])
 	hull = ConvexHull(location)
 	
@@ -121,16 +133,6 @@ def suggestions(p_like, p_close, venue_group):
 	for venue in venueid:
 		print(venue.venueid)
 
-
-def haversine_dist(lat1, lon1, lat2, lon2):
-	"""Calculate the Haversine distance between two geo co-ordiantes."""
-	radius = 3959  # miles
-	dlat = math.radians(lat2 - lat1)
-	dlon = math.radians(lon2 - lon1)
-	a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
-	c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-	d = radius * c
-	return d
 
 if __name__ == '__main__':
 	df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitude','longitude','timezone','utctime'])
