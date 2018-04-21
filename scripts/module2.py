@@ -6,9 +6,6 @@ import numpy as np
 
 def get_list_of_users(df):
 	users = pd.DataFrame({'count' : df.groupby(['userid']).size()}).reset_index()
-	# users = df['userid'].unique()
-	# print(users[0])
-	#user_rows = df.loc[df['userid'] == users['userid'][0]]
 	#print(users[1:2].userid)
 	return users
 
@@ -24,10 +21,8 @@ def get_user_rows(df, user):
 def get_average_users_per_venue():
 	user = pd.DataFrame({'count' : df.groupby(['userid']).size()}).reset_index()
 	#print(len(user))
-
 	venue = pd.DataFrame({'count' : df.groupby(['venueid']).size()}).reset_index()
 	#print(len(venue))
-
 	avg = len(venue) / len(user)
 	#print(avg)
 	return avg
