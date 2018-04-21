@@ -2,6 +2,7 @@ import pandas as pd
 import math
 from scipy.spatial import ConvexHull
 import numpy as np
+from sklearn.cluster import DBSCAN
 
 def get_rows_by_category(df, category):
 	#select all rows with category coffee shop
@@ -52,11 +53,11 @@ def get_all_user_checkins(df, user):
 	user_rows = pd.DataFrame({'count' : category_rows.groupby(['userid','venueid','latitude','longitude']).size()}).reset_index()
 	return user_rows
 
-def calculate_p_go(count_venue, count_user_venue):
-	#calculalte the probability of the user going to the venue
-	p_go = count_user_venue / count_venue
-	return p_go
-	#print(p_go)
+# def calculate_p_go(count_venue, count_user_venue):
+# 	#calculalte the probability of the user going to the venue
+# 	p_go = count_user_venue / count_venue
+# 	return p_go
+# 	#print(p_go)
 
 def calculate_p_close(venue_group, user_rows):
 	#number of checkins in venue radius / total number of checkins of each user
@@ -80,15 +81,31 @@ def calculate_p_close(venue_group, user_rows):
 	# user_rows = user_rows.drop(labels = ['distance'], axis = 1)
 	# print(user_rows.head())
 
+def haversine_dist(lat1, lon1, lat2, lon2):
+	"""Calculate the Haversine distance between two geo co-ordiantes."""
+	radius = 3959  # miles
+	dlat = math.radians(lat2 - lat1)
+	dlon = math.radians(lon2 - lon1)
+	
+	a = math.sin(dlat / 2) * math.sin(dlat / 2) + \
+	math.cos(math.radians(lat1)) \
+	* math.cos(math.radians(lat2)) * \
+	math.sin(dlon / 2) * math.sin(dlon / 2)
+	
+	c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+	d = radius * c
+	return d
+
 def calculate_p_like(category_rows, venue_group, time):
 	#number of checkins at a venue / number of checkins at all venues belonging to the same category
 	denom = sum(venue_group['count'])
-	avg_time = pd.DataFrame({'average' : category_rows.groupby(['userid','venueid'])['hour'].mean()}).reset_index()
+	avg_time = pd.DataFrame({'average' : category_rows.groupby(['venueid'])['hour'].mean()}).reset_index()
 	p_like = []
 	#time penalty to make sure a place popular at nights is not suggested in the morning
 	for index, venue in venue_group.iterrows():
 		num = venue['count']
 		initial_p_like = (num / denom)
+		
 		time_diff = abs(time - venue['avg_time'])
 		if time_diff <= 3:
 			penalized_p_like = initial_p_like
@@ -100,51 +117,45 @@ def calculate_p_like(category_rows, venue_group, time):
 			penalized_p_like = initial_p_like * 0.4
 		else:
 			penalized_p_like = initial_p_like * 0.2
+		
 		p_like.append(penalized_p_like)
 	return p_like
 	#distance between venue coordinates and each of user checkin, filter checkins using distance threshold and count #
 
 def find_weights(user_rows):
+	
 	location = np.array(user_rows[['latitude', 'longitude']])
 	hull = ConvexHull(location)
 	
 
 def suggestions(p_like, p_close, venue_group):
+	w1 = 0.6
 	x = np.array(p_like)
 	y = np.array(p_close)
-	p = x * y
+	p = w1 + x * y
 	q = np.argsort(p)
 	venueid = []
 	for i in range(1,21):
 		index = q[i]
 		venueid.append(venue_group.loc[index])
+	print('\n\n')
+	print("The suggested venueids for you are:")
 	for venue in venueid:
 		print(venue.venueid)
 
-
-def haversine_dist(lat1, lon1, lat2, lon2):
-	"""Calculate the Haversine distance between two geo co-ordiantes."""
-	radius = 3959  # miles
-	dlat = math.radians(lat2 - lat1)
-	dlon = math.radians(lon2 - lon1)
-	a = math.sin(dlat / 2) * math.sin(dlat / 2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) * math.sin(dlon / 2)
-	c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-	d = radius * c
-	return d
 
 if __name__ == '__main__':
 	df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitude','longitude','timezone','utctime'])
 	category = "Coffee Shop"
 	user = 642
 	time = 16
-
 	category_rows = get_rows_by_category(df, category)
 	venue_group = get_checkin_count_per_venue_in_category(category_rows)
 	count_venue = get_number_of_venues_per_category(venue_group)
 	user_venue_group = get_sorted_user_checkin_count_at_venues(category_rows)
 	count_user_venue = get_number_venues_visited_by_user(user_venue_group, user)
 	user_rows = get_all_user_checkins(df, user)
-	p_go = calculate_p_go(count_venue, count_user_venue)
+	# p_go = calculate_p_go(count_venue, count_user_venue)
 	p_close = calculate_p_close(venue_group, user_rows)
 	p_like = calculate_p_like(category_rows, venue_group, time)
 	#print(p_go)
