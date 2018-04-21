@@ -53,11 +53,11 @@ def get_all_user_checkins(df, user):
 	user_rows = pd.DataFrame({'count' : category_rows.groupby(['userid','venueid','latitude','longitude']).size()}).reset_index()
 	return user_rows
 
-def calculate_p_go(count_venue, count_user_venue):
-	#calculalte the probability of the user going to the venue
-	p_go = count_user_venue / count_venue
-	return p_go
-	#print(p_go)
+# def calculate_p_go(count_venue, count_user_venue):
+# 	#calculalte the probability of the user going to the venue
+# 	p_go = count_user_venue / count_venue
+# 	return p_go
+# 	#print(p_go)
 
 def calculate_p_close(venue_group, user_rows):
 	#number of checkins in venue radius / total number of checkins of each user
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 	user_venue_group = get_sorted_user_checkin_count_at_venues(category_rows)
 	count_user_venue = get_number_venues_visited_by_user(user_venue_group, user)
 	user_rows = get_all_user_checkins(df, user)
-	p_go = calculate_p_go(count_venue, count_user_venue)
+	# p_go = calculate_p_go(count_venue, count_user_venue)
 	p_close = calculate_p_close(venue_group, user_rows)
 	p_like = calculate_p_like(category_rows, venue_group, time)
 	#print(p_go)
