@@ -14,19 +14,45 @@ You need to have Python versions 2.x or later to run this project.
 
 The following python libraries need to be installed:
 1. pandas
-2. math
-3. scipy
-4. numpy
-5. sklearn
-6. gmplot
-7. matplotlib
-8. webbrowser
-9. os
+2. scipy
+3. numpy
+4. sklearn
+5. gmplot
+6. matplotlib
+7. webbrowser
 
-They can be installed using pip. For eg.
+If you are using pip then run the following commands:
 ```
+pip install pandas
+pip install scipy
+pip install numpy
+pip install sklearn
 pip install gmplot
+pip install matplotlib
+pip install webbrowser
+
 ```
+
+###Running the modules
+
+##Module 1: Visualization using Heat Map
+
+```
+
+python visualization-gmap.py
+
+```
+
+##Module 2: Recommending places to users
+
+```
+python recom.py <category name> <userid> <current time in hrs>
+
+For eg: python recom.py "Coffee Shop" 642 16
+
+```
+
+##Module 3: Recommending users to places
 
 ## Authors
 
@@ -37,5 +63,5 @@ pip install gmplot
 
 ## Acknowledgments
 
-* We thank our instructors Dr. Raju Vatsavai and Bharathkumar Ramachandra for their support throughout the project
+* We thank our instructors, Dr. Raju Vatsavai and TA Bharathkumar Ramachandra, for their support throughout the project
 

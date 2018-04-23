@@ -3,14 +3,17 @@ import math
 from scipy.spatial import ConvexHull
 import numpy as np
 from sklearn.cluster import DBSCAN
+import sys
 
 def get_rows_by_category(df, category):
 	#select all rows with category coffee shop
+	print("in 1")
 	category_rows = df.loc[df['venuecatname'] == category]
 	return category_rows
 
 def get_checkin_count_per_venue_in_category(category_rows):
 	#get check incount of each venue with category coffee shop
+	print("in 2")
 	temp = category_rows
 	time = pd.to_datetime(temp['utctime'])
 	hour = []
@@ -28,6 +31,7 @@ def get_checkin_count_per_venue_in_category(category_rows):
 
 def get_number_of_venues_per_category(venue_group):
 	#count number of venues per category
+	print("in 3")
 	count_venue = len(venue_group['venueid'])
 	#print(count_venue)
 	#38333
@@ -35,12 +39,14 @@ def get_number_of_venues_per_category(venue_group):
 
 def get_sorted_user_checkin_count_at_venues(category_rows):
 	#count of how many times a user has gone to a particular venue
+	print("in 4")
 	user_venue_group = pd.DataFrame({'count' : category_rows.groupby(['userid','venueid']).size()}).reset_index()
 	user_venue_group = user_venue_group.sort_values(['count'], ascending=False)
 	return user_venue_group
 
 def get_number_venues_visited_by_user(user_venue_group, user):
 	#find all rows about that user
+	print("in 5")
 	user_rows = user_venue_group.loc[df['userid'] == user]
 	count_user_venue = len(set(user_rows['venueid']))
 	#print(count_user_venue)
@@ -49,6 +55,7 @@ def get_number_venues_visited_by_user(user_venue_group, user):
 
 def get_all_user_checkins(df, user):
 	#list of all checkins made by a user
+	print("in 6")
 	user_rows = df.loc[df['userid'] == user]
 	user_rows = pd.DataFrame({'count' : category_rows.groupby(['userid','venueid','latitude','longitude']).size()}).reset_index()
 	return user_rows
@@ -61,6 +68,7 @@ def get_all_user_checkins(df, user):
 
 def calculate_p_close(venue_group, user_rows):
 	#number of checkins in venue radius / total number of checkins of each user
+	print("in 7")
 	x = 0
 	d = []
 	x = user_rows
@@ -98,6 +106,7 @@ def haversine_dist(lat1, lon1, lat2, lon2):
 
 def calculate_p_like(category_rows, venue_group, time):
 	#number of checkins at a venue / number of checkins at all venues belonging to the same category
+	print("in 8")
 	denom = sum(venue_group['count'])
 	avg_time = pd.DataFrame({'average' : category_rows.groupby(['venueid'])['hour'].mean()}).reset_index()
 	p_like = []
@@ -123,22 +132,23 @@ def calculate_p_like(category_rows, venue_group, time):
 	#distance between venue coordinates and each of user checkin, filter checkins using distance threshold and count #
 
 def find_weights(user_rows):
-	
 	location = np.array(user_rows[['latitude', 'longitude']])
 	hull = ConvexHull(location)
-	
+	return hull.volume
 
 def suggestions(p_like, p_close, venue_group):
+	print("in 9")
 	w1 = 0.6
 	x = np.array(p_like)
 	y = np.array(p_close)
 	p = w1 + x * y
 	q = np.argsort(p)
 	venueid = []
-	for i in range(1,21):
+	end = 21 if len(q)>=21 else len(q)
+	for i in range(1,end):
 		index = q[i]
 		venueid.append(venue_group.loc[index])
-	print('\n\n')
+	print('\n')
 	print("The suggested venueids for you are:")
 	for venue in venueid:
 		print(venue.venueid)
@@ -146,9 +156,12 @@ def suggestions(p_like, p_close, venue_group):
 
 if __name__ == '__main__':
 	df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitude','longitude','timezone','utctime'])
-	category = "Coffee Shop"
-	user = 642
-	time = 16
+	category = sys.argv[1]
+	user = int(sys.argv[2])
+	time = int(sys.argv[3])
+	# category = "Coffee Shop"
+	# user = 642
+	# time = 16
 	category_rows = get_rows_by_category(df, category)
 	venue_group = get_checkin_count_per_venue_in_category(category_rows)
 	count_venue = get_number_of_venues_per_category(venue_group)
