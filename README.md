@@ -32,15 +32,15 @@ pip install matplotlib
 pip install webbrowser
 ```
 
-### Running the modules
+## Running the modules
 
-## Module 1: Visualization using Heat Map
+### Module 1: Visualization using Heat Map
 
 ```
 python visualization-gmap.py
 ```
 
-## Module 2: Recommending places to users
+### Module 2: Recommending places to users
 
 ```
 python recom.py <category name> <userid> <current time in hrs>
@@ -48,7 +48,7 @@ python recom.py <category name> <userid> <current time in hrs>
 For eg: python recom.py "Coffee Shop" 642 16
 ```
 
-## Module 3: Recommending users to places
+### Module 3: Recommending users to places
 
 ## Authors
 
