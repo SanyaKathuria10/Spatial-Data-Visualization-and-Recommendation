@@ -130,7 +130,6 @@ def suggestions(p_like, p_close, venue_group):
 	for venue in venueid:
 		print(venue.venueid)
 
-
 if __name__ == '__main__':
 	df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitude','longitude','timezone','utctime'])
 	category = sys.argv[1]
