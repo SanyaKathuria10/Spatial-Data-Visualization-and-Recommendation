@@ -50,6 +50,12 @@ For eg: python recom.py "Coffee Shop" 642 16
 
 ### Module 3: Recommending users to places
 
+```
+python module2.py <category name> <venueid>
+
+For eg: python module2.py "Coffee Shop" "4ab966c3f964a5203c7f20e3"
+```
+
 ## Authors
 
 * **Neel Kapadia** - [neelkapadia](https://github.com/neelkapadia)

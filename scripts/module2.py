@@ -3,6 +3,7 @@ import math
 from scipy.spatial import ConvexHull
 import numpy as np
 import surprise
+import sys
 
 def get_list_of_users(df):
 	users = pd.DataFrame({'count' : df.groupby(['userid']).size()}).reset_index()
@@ -165,10 +166,11 @@ def suggestions(p_go, p_like, p_close, users):
 
 if __name__ == '__main__':
 	df = pd.read_csv("../data/data-ny.csv", sep = ',', header=None, names =  ['userid', 'venueid', 'venuecatid', 'venuecatname','latitude','longitude','timezone','utctime'])
-	category = "Coffee Shop"
-	venueid = '4ab966c3f964a5203c7f20e3'
-	#user = 642
-
+	# category = "Coffee Shop"
+	# venueid = '4ab966c3f964a5203c7f20e3'
+	# user = 642
+	category = sys.argv[1]
+	venueid = sys.argv[2]
 	category_rows = get_rows_by_category(df, category)
 	venue_group = get_checkin_count_per_venue_in_category(category_rows)
 	count_venue = get_number_of_venues_per_category(venue_group)
