@@ -30,7 +30,6 @@ pip install sklearn
 pip install gmplot
 pip install matplotlib
 pip install webbrowser
-
 ```
 
 ###Running the modules
@@ -38,9 +37,7 @@ pip install webbrowser
 ##Module 1: Visualization using Heat Map
 
 ```
-
 python visualization-gmap.py
-
 ```
 
 ##Module 2: Recommending places to users
@@ -49,7 +46,6 @@ python visualization-gmap.py
 python recom.py <category name> <userid> <current time in hrs>
 
 For eg: python recom.py "Coffee Shop" 642 16
-
 ```
 
 ##Module 3: Recommending users to places
