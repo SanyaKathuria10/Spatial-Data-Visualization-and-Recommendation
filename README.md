@@ -34,7 +34,7 @@ pip install webbrowser
 
 ## Running the modules
 
-### Module 1: Visualization using Heat Map
+### Module 1: Visualization using Heat Map and Graphical Representation
 
 ```
 python visualization-gmap.py
