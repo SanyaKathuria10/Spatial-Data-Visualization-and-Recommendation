@@ -38,6 +38,8 @@ pip install webbrowser
 
 ```
 python visualization-gmap.py
+
+To view the visualization graphs, open index.html in your browser (Note that this page renders only with IE/Edge browsers)
 ```
 
 ### Module 2: Recommending places to users
