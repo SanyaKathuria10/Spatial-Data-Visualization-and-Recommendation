@@ -60,9 +60,9 @@ For eg: python module2.py "Coffee Shop" "4ab966c3f964a5203c7f20e3"
 
 ## Authors
 
+* **Sanya Kathuria** - [SanyaKathuria10](https://github.com/SanyaKathuria10)
 * **Neel Kapadia** - [neelkapadia](https://github.com/neelkapadia)
 * **Tushita Roychaudhury** - [tushitarc](https://github.com/tushitarc)
-* **Sanya Kathuria** - [SanyaKathuria10](https://github.com/SanyaKathuria10)
 
 
 ## Acknowledgments
